@@ -8,6 +8,7 @@ const {
     searchUserByEmailService
 } = require("../services/userService");
 
+
 module.exports = {
     //Lấy Tất cả User
     getAllUserController: async (req, res) => {
@@ -46,7 +47,7 @@ module.exports = {
     //Tạo mới User
     createUserController: async (req, res) => {
         try {
-            let result = await createUserService(req.body);
+            let result = await createUserService(req.body, req.files);
 
             return res.status(200).json({
                 errCode: 0,
@@ -63,7 +64,7 @@ module.exports = {
     //Sửa User
     updateUserController: async (req, res) => {
         try {
-            let result = await updateUserService(req.body, req.params);
+            let result = await updateUserService(req.body, req.params, req.files);
 
             return res.status(200).json({
                 errCode: 0,

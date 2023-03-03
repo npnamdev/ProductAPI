@@ -8,7 +8,7 @@ const {
     deleteUserController,
     getAUserController,
     filterUserByRoleController,
-    searchUserByEmailController
+    searchUserByEmailController,
 } = require('../controllers/userController');
 
 

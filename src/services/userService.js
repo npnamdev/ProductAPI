@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const { uploadSingleFileImage } = require('../helpers/uploadFile')
 
 module.exports = {
     //Lấy tất cả User
@@ -16,21 +17,24 @@ module.exports = {
 
 
     //Tạo mới User
-    createUserService: async (dataBody) => {
-        const { username, email, password, role } = dataBody
-        let result = await User.create({ username, email, password, role });
+    createUserService: async (dataBody, dataFile) => {
+        const { username, email, password, role } = dataBody;
+        let imageURL = await uploadSingleFileImage(dataFile.image);
+
+        let result = await User.create({ username, email, password, role, image: imageURL.path });
 
         return result;
     },
 
 
     //Sửa User
-    updateUserService: async (dataBody, dataParams) => {
+    updateUserService: async (dataBody, dataParams, dataFile) => {
         const { username, email, password, role } = dataBody;
+        let imageURL = await uploadSingleFileImage(dataFile.image);
 
         let result = await User.updateOne(
             { _id: dataParams.id },
-            { username, email, password, role }
+            { username, email, password, role, image: imageURL.path }
         );
 
         return result;

@@ -14,7 +14,6 @@ module.exports = {
     getAllUserController: async (req, res) => {
         try {
             const result = await getAllUserService(req.params);
-
             return res.status(200).json({
                 errCode: 0,
                 data: result
@@ -30,7 +29,7 @@ module.exports = {
     //Lấy Chi tiết 1 User
     getAUserController: async (req, res) => {
         try {
-            const result = await getAUserService(req.params);
+            const result = await getAUserService();
 
             return res.status(200).json({
                 errCode: 0,
@@ -55,7 +54,7 @@ module.exports = {
             })
         } catch (error) {
             return res.status(500).json({
-                errMsg: "Error Server!"
+                errMsg: "Error Server2!"
             })
         }
     },

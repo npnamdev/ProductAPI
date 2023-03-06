@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const { uploadSingleFileImage } = require('../helpers/uploadFile')
+require('dotenv').config();
 
 module.exports = {
     //Lấy tất cả User
@@ -21,7 +22,10 @@ module.exports = {
         const { username, email, password, role } = dataBody;
         let imageURL = await uploadSingleFileImage(dataFile.image);
 
-        let result = await User.create({ username, email, password, role, image: imageURL.path });
+        let result = await User.create({
+            username, email, password, role,
+            image: `http://${process.env.HOST_NAME}:${process.env.PORT}/images/${imageURL.path}`
+        });
 
         return result;
     },
@@ -43,7 +47,7 @@ module.exports = {
 
     //Xóa User
     deleteUserService: async (dataParams) => {
-        let result = await User.deleteOne({ _id: dataParams.id });
+        let result = await User.findByIdAndDelete({ _id: dataParams.id });
 
         return result;
     },

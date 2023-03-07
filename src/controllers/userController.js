@@ -7,7 +7,7 @@ const {
     filterUserByRoleService,
     searchUserByEmailService
 } = require("../services/userService");
-
+const bcrypt = require('bcrypt');
 
 module.exports = {
     //Lấy Tất cả User
@@ -29,7 +29,7 @@ module.exports = {
     //Lấy Chi tiết 1 User
     getAUserController: async (req, res) => {
         try {
-            const result = await getAUserService();
+            const result = await getAUserService(req.params);
 
             return res.status(200).json({
                 errCode: 0,
@@ -53,6 +53,7 @@ module.exports = {
                 data: result
             })
         } catch (error) {
+            console.log(error);
             return res.status(500).json({
                 errMsg: "Error Server2!"
             })
@@ -70,6 +71,7 @@ module.exports = {
                 data: result
             })
         } catch (error) {
+            console.log(error);
             return res.status(500).json({
                 errMsg: "Error Server!"
             })

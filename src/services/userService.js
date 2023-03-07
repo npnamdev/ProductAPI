@@ -3,49 +3,71 @@ const { uploadSingleFileImage } = require('../helpers/uploadFile')
 require('dotenv').config();
 
 module.exports = {
-    //Lấy tất cả User
+    //Get All User
     getAllUserService: async () => {
         let result = await User.find({});
         return result;
     },
 
 
-    //Lấy chi tiết 1 User
+    //Get A User
     getAUserService: async (dataParams) => {
         let result = await User.find({ _id: dataParams.id });
+
         return result;
     },
 
 
-    //Tạo mới User
+    //Create User
     createUserService: async (dataBody, dataFile) => {
-        const { username, email, password, role } = dataBody;
-        let imageURL = await uploadSingleFileImage(dataFile.image);
+        const { username, email, password, phone, address, role } = dataBody;
+        const checkEmail = await User.findOne({ email });
+        if (checkEmail) {
+            throw new Error('Email đã tồn tại');
+        }
+
+        let imageURL = '';
+        if (dataFile && dataFile.image) {
+            imageURL = await uploadSingleFileImage(dataFile.image);
+            imageURL = `http://${process.env.HOST_NAME}:${process.env.PORT}/images/${imageURL.path}`;
+        }
 
         let result = await User.create({
-            username, email, password, role,
-            image: `http://${process.env.HOST_NAME}:${process.env.PORT}/images/${imageURL.path}`
+            username, email, password, phone, address, role, image: imageURL
         });
 
         return result;
     },
 
 
-    //Sửa User
+    //Update User
     updateUserService: async (dataBody, dataParams, dataFile) => {
-        const { username, email, password, role } = dataBody;
-        let imageURL = await uploadSingleFileImage(dataFile.image);
+        const { username, password, phone, address, role } = dataBody;
+        const user = await User.findById(dataParams.id);
+
+        let imageURL = user.image;
+        if (dataFile && dataFile.image) {
+            const newImageURL = await uploadSingleFileImage(dataFile.image);
+            imageURL = `http://${process.env.HOST_NAME}:${process.env.PORT}/images/${newImageURL.path}`;
+        }
 
         let result = await User.updateOne(
             { _id: dataParams.id },
-            { username, email, password, role, image: imageURL.path }
+            {
+                username,
+                password,
+                phone,
+                address,
+                role,
+                image: imageURL === user.image ? user.image : imageURL,
+            }
         );
 
         return result;
     },
 
 
-    //Xóa User
+    //Delete User
     deleteUserService: async (dataParams) => {
         let result = await User.findByIdAndDelete({ _id: dataParams.id });
 
@@ -53,7 +75,7 @@ module.exports = {
     },
 
 
-    //Lọc User theo Role
+    //Filter User By Role
     filterUserByRoleService: async (dataBody) => {
         let result = "";
 

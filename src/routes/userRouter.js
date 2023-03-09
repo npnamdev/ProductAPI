@@ -7,25 +7,25 @@ const {
     updateUserController,
     deleteUserController,
     getAUserController,
-    filterUserByRoleController,
-    searchUserByEmailController,
+    loginController,
+    logoutController
 } = require('../controllers/userController');
 
 
 
-router.get('/', getAllUserController);
 
-router.get('/:id', getAUserController);
+router.get('/users', getAllUserController);
 
-router.post('/', createUserController);
+router.get('/users/:id', getAUserController);
 
-router.put('/:id', updateUserController);
+router.post('/users', createUserController);
 
-router.delete('/:id', deleteUserController);
+router.put('/users/:id', updateUserController);
 
-router.post('/filter', filterUserByRoleController);
+router.delete('/users/:id', deleteUserController);
 
-router.post('/search', searchUserByEmailController);
+router.post('/login', loginController);
 
+router.post('/logout', logoutController);
 
 module.exports = router;

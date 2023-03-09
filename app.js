@@ -23,13 +23,14 @@ app.use(cors({ origin: '*' }));
 app.use(fileUpload());
 
 
+
 //Config req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
 //Config router
-app.use('/v1/api/users', userRouter);
+app.use('/v1/api/', userRouter);
 
 
 (async () => {

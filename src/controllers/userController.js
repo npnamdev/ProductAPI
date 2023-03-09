@@ -4,18 +4,16 @@ const {
     updateUserService,
     deleteUserService,
     getAUserService,
-    filterUserByRoleService,
-    searchUserByEmailService
+    loginService,
+    logoutService
 } = require("../services/userService");
-const bcrypt = require('bcrypt');
 
 module.exports = {
     //Lấy Tất cả User
     getAllUserController: async (req, res) => {
         try {
-            const result = await getAllUserService(req.params);
+            const result = await getAllUserService(req.query);
             return res.status(200).json({
-                errCode: 0,
                 data: result
             })
         } catch (error) {
@@ -96,15 +94,11 @@ module.exports = {
     },
 
 
-    //Lọc User theo Role
-    filterUserByRoleController: async (req, res) => {
+    loginController: async (req, res) => {
         try {
-            let result = await filterUserByRoleService(req.body);
+            let result = await loginService(req.body);
 
-            return res.status(200).json({
-                errCode: 0,
-                data: result
-            })
+            return res.status(200).json(result)
         } catch (error) {
             return res.status(500).json({
                 errMsg: "Error Server!"
@@ -113,19 +107,16 @@ module.exports = {
     },
 
 
-    //Tìm kiếm User theo name
-    searchUserByEmailController: async (req, res) => {
+    logoutController: async (req, res) => {
         try {
-            let result = await searchUserByEmailService(req.body);
+            let result = await logoutService(req.body);
 
-            return res.status(200).json({
-                errCode: 0,
-                data: result
-            })
+            return res.status(200).json(result)
         } catch (error) {
             return res.status(500).json({
                 errMsg: "Error Server!"
             })
         }
     },
+
 }
